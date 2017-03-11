@@ -5,6 +5,7 @@
 	<title></title>
 	<script src="js/jquery-1.11.3.js"></script>
 	<script src="js/ajax.js"></script>
+	
 <style type="text/css">
 	#wrap{
 		position:relative;
@@ -40,7 +41,13 @@
 		font-weight: bold;
 		font-family: 'microsoft yahei';
 	}
-
+	#onameWarning,#onumWarning{
+		display: none;
+		height: 25px;
+		width: 150px;
+		border-radius: 25px;
+		border:3px red solid;
+	}
 
 </style>
 		
@@ -51,8 +58,11 @@
 <form action="/WqeJ/NumberRegite" method="post" class="box">
 
 <label><p>姓名</p><input type="text" name="xingming"  placeholder="Your Full Name" id="oname"></label>
+<div id="onameWarning">请输入正确的姓名</div>
 <label><p>学号</p><input type="text" name="xuehao"  placeholder="输入8位学号" id="onum"></label>
+<div id="onumWarning">请输入正确的学号</div>
 <label><p>手机号码</p><input type="text" name="shouji"  placeholder="输入11位手机号码" id="otel"></label>
+<div></div>
 <label>
 <p>专业班级</p>
 <select name="selection">
@@ -82,9 +92,14 @@
 		var Oname = document.getElementById('oname');
 		var Onum = document.getElementById('onum');
 		var Otel = document.getElementById('otel');
+		var OnameWarning = document.getElementById('onameWarning');
+		var OnumWarning = document.getElementById('onumWarning');
 		Oname.onblur = function(){
-			if(this.value){
-				return true;
+			ajax('get','/NumberRegite','',function(data){
+			var d = JSON.parse(data);
+			if(d.error1="[姓名不能为空]"){
+				OnameWarning.style.display = 'block';
+				
 			/*	ajax('get','','',function(data){
 					var d = JSON.parse(data);
 					if(d.error1){
@@ -94,27 +109,32 @@
 					}
 				});*/
 			}else{
-				alert('姓名为空');
-			};
+				// alert('姓名为空');
+				OnameWarning.style.display = 'none';
+				return true;
+			};});
 		};
 		Onum.onblur = function(){
-			if(this.value){
-				return true;
+			ajax('get','/NumberRegite','',function(data){
+				var d = JSON.parse(data);
+			if(d.error2="[学号有问题]"){
+			OnumWarning.style.display = 'block';
 			
-			}else{
-				alert('学号为空');
+			}else {
+				OnumWarning.style.display = 'none'
 			};
+		});
 		};
-		Otel.onblur = function(){
-			if(this.value){
-				return true;
+		// Otel.onblur = function(){
+		// 	if(this.value){
+				
 			
-			}else{
-				alert('手机号为空');
-			};
-		};
+		// 	}else{
+		// 		alert('手机号为空');
+		// 	};
+		// };
 	};
-
+		
 	
 	
 </script>
